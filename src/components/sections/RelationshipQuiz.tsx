@@ -47,7 +47,13 @@ const questions = [
   },
 ];
 
-export default function RelationshipQuiz() {
+interface RelationshipQuizProps {
+  onComplete?: () => void;
+}
+
+export default function RelationshipQuiz({
+  onComplete,
+}: RelationshipQuizProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [score, setScore] = useState(0);
@@ -119,13 +125,18 @@ export default function RelationshipQuiz() {
 
                     let buttonStyle = "border-white/20 hover:bg-white/5";
                     if (isAnswered) {
-                      if (isCorrect)
+                      if (isCorrect && isSelected) {
+                        // User picked correct answer
                         buttonStyle =
                           "bg-green-500/20 border-green-500/50 text-green-200";
-                      else if (isSelected)
+                      } else if (isSelected && !isCorrect) {
+                        // User picked wrong answer
                         buttonStyle =
                           "bg-red-500/20 border-red-500/50 text-red-200";
-                      else buttonStyle = "opacity-50 border-transparent";
+                      } else {
+                        // Other options (don't reveal correct one if user was wrong)
+                        buttonStyle = "opacity-50 border-transparent";
+                      }
                     }
 
                     return (
@@ -136,7 +147,7 @@ export default function RelationshipQuiz() {
                         className={`p-4 rounded-xl border text-lg transition-all duration-300 ${buttonStyle} text-left relative overflow-hidden`}
                       >
                         <span className="relative z-10">{option}</span>
-                        {isAnswered && isCorrect && (
+                        {isAnswered && isCorrect && isSelected && (
                           <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
@@ -176,18 +187,41 @@ export default function RelationshipQuiz() {
                 <p className="text-xl text-white/80 font-light mb-8">
                   {score === questions.length
                     ? "Wopyuu bebee Aku sayang kamuuu😘😘"
-                    : "Kita punya seumur hidup buat saling kenal lagi."}
+                    : "Yah, masih salah! Kamu harus dapet skor sempurna buat lanjut 😋"}
                 </p>
-                <button
-                  onClick={() => {
-                    setShowResult(false);
-                    setCurrentQuestion(0);
-                    setScore(0);
-                  }}
-                  className="px-8 py-3 bg-white/10 hover:bg-white/20 rounded-full text-blush transition-colors"
-                >
-                  Main Lagi
-                </button>
+                <div className="flex flex-col gap-4 items-center justify-center">
+                  <button
+                    onClick={() => {
+                      setShowResult(false);
+                      setCurrentQuestion(0);
+                      setScore(0);
+                      setIsAnswered(false);
+                      setSelectedOption(null);
+                    }}
+                    className={`px-8 py-3 rounded-full transition-colors ${
+                      score === questions.length
+                        ? "bg-white/10 hover:bg-white/20 text-blush"
+                        : "bg-wine text-white font-bold hover:bg-wine/80 shadow-lg animate-bounce"
+                    }`}
+                  >
+                    {score === questions.length
+                      ? "Main Lagi"
+                      : "Ulangi Quiz (Harus 100%!) 😤"}
+                  </button>
+
+                  {score === questions.length && onComplete && (
+                    <motion.button
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={onComplete}
+                      className="px-8 py-4 bg-white text-wine font-bold text-xl rounded-full shadow-lg hover:shadow-xl transition-all animate-pulse"
+                    >
+                      Lanjut ke Surprise 🎁
+                    </motion.button>
+                  )}
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
