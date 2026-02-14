@@ -163,14 +163,14 @@ export default function SequenceScroll() {
           {/* 0% - Centered */}
           <motion.div
             style={{ opacity: opacity1, y: y1 }}
-            className="absolute inset-0 flex flex-col items-center justify-center text-center px-4"
+            className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 md:px-8"
           >
-            <h1 className="text-5xl md:text-7xl font-bold text-blush drop-shadow-lg mb-4">
+            <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold text-blush drop-shadow-lg mb-4 md:mb-6 leading-tight">
               Happy Valentine’s Day,
               <br />
-              <span className="text-gold">Chicka Cantikk</span>
+              <span className="text-gold block mt-2">Chicka Cantikk</span>
             </h1>
-            <p className="text-xl md:text-2xl text-white/90 font-light">
+            <p className="text-base sm:text-xl md:text-2xl text-white/90 font-light max-w-xs sm:max-w-lg md:max-w-2xl mx-auto">
               You are the most beautiful chapter of my life.
             </p>
           </motion.div>
